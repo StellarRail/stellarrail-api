@@ -1,0 +1,35 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": "..",
+  "testRegex": ".*\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": [
+    "src/auth/auth.service.ts",
+    "src/users/users.service.ts",
+    "src/payments/payments.service.ts",
+    "src/payments/state-machine.ts",
+    "src/payments/idempotency.service.ts",
+    "src/payments/blocklist.service.ts",
+    "src/payments/limits.service.ts",
+    "src/chain/*.service.ts",
+    "src/audit/audit.service.ts",
+    "src/notifications/notifications.service.ts",
+    "src/common/stellar.ts",
+    "src/common/logging/logger.service.ts",
+    "src/config/*.ts",
+    "src/workers/*.service.ts"
+  ],
+  "coverageDirectory": "<rootDir>/coverage",
+  "testEnvironment": "node",
+  "coverageThreshold": {
+    "global": {
+      "statements": 70
+    }
+  }
+}
