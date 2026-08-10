@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  APPROVER
+}
+
+enum PaymentStatus {
+  DRAFT
+  CREATED
+  LOCKED_IN_ESCROW
+  PENDING_APPROVAL
+  SETTLING
+  SETTLED
+  REFUNDING
+  REFUNDED
+  FAILED
+  EXPIRED
+  TIMEOUT
+}
+
+model User {
+  id           String           @id @default(uuid())
+  email        String           @unique
+  passwordHash String
+  role         Role             @default(OPERATOR)
+  mfaSecret    String?
+  mfaEnabled   Boolean          @default(false)
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  payments     PaymentRequest[] @relation("Requester")
+  audits       AuditLog[]
+}
+
+model PaymentRequest {
+  id             String        @id @default(uuid())
+  referenceId    String        @unique
+  requesterId    String
+  requester      User          @relation("Requester", fields: [requesterId], references: [id])
+  destination    String
+  amountStroops  BigInt
+  memo           String?
+  status         PaymentStatus @default(CREATED)
+  version        Int           @default(1)
+  escrowTxHash   String?
+  releaseTxHash  String?
+  refundTxHash   String?
+  onChainStatus  String?
+  ledger         Int?
+  confirmedAt    DateTime?
+  needsReview    Boolean       @default(false)
+  deadline       DateTime
+  idempotencyKey String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status, createdAt])
+  @@index([requesterId])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  timestamp   DateTime @default(now())
+  actorId     String?
+  actor       User?    @relation(fields: [actorId], references: [id])
+  action      String
+  entityType  String
+  entityId    String?
+  payloadHash String
+  ip          String?
+  userAgent   String?
+  prevHash    String?
+  hash        String
+
+  @@index([timestamp])
+  @@index([entityId])
+}
+
+model IdempotencyKey {
+  key       String   @id
+  reqHash   String
+  response  Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model BlockedAddress {
+  address   String   @id
+  reason    String?
+  createdAt DateTime @default(now())
+}
+
+model SystemConfig {
+  id        Int      @id @default(1)
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+model ReconciliationRun {
+  id         String    @id @default(uuid())
+  startedAt  DateTime
+  finishedAt DateTime?
+  checked    Int
+  mismatches Json
+  status     String
+}
