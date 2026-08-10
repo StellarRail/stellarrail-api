@@ -1,0 +1,1 @@
+{"openapi":"3.0.0","info":{"title":"StellarRail API","version":"1.0.0-rc1"},"paths":{"/api/v1/health":{"get":{"tags":["health"]}}}}
