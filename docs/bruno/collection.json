@@ -1,0 +1,1 @@
+{"name":"StellarRail","requests":[{"name":"login-create-approve","steps":["POST /api/v1/auth/login","POST /api/v1/payments","POST /api/v1/payments/:id/approve"]}]}
