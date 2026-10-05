@@ -25,7 +25,7 @@ jobs:
         with:
           push: false
           tags: "ghcr.io/org/stellarrail-api:${{ github.sha }}"
-      - uses: aquasecurity/trivy-action@0.24.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: "ghcr.io/org/stellarrail-api:${{ github.sha }}"
           severity: CRITICAL
