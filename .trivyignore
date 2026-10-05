@@ -1,0 +1,5 @@
+# Base-image npm tooling only (node:20-alpine /usr/local/lib/node_modules), not
+# reachable at runtime: app runs as non-root `node` user and never extracts
+# untrusted tarballs. Re-check on every node base-image bump.
+# Triaged per docs/SECURITY_REVIEW.md.
+CVE-2026-59873 exp:2027-01-01

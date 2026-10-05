@@ -31,4 +31,5 @@ jobs:
           image-ref: "ghcr.io/org/stellarrail-api:${{ github.sha }}"
           severity: CRITICAL
           exit-code: "1"
+          trivyignores: .trivyignore
       - run: npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script || true
