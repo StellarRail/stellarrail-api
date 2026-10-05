@@ -24,6 +24,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           push: false
+          load: true
           tags: "ghcr.io/org/stellarrail-api:${{ github.sha }}"
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
