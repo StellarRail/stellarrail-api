@@ -1,30 +1,108 @@
 name: CI
-on: { push: {}, pull_request: {} }
+
+on:
+  push:
+  pull_request:
+
 jobs:
   lint:
     runs-on: ubuntu-latest
-    steps: [{ uses: actions/checkout@v4 }, { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }, { run: npm ci }, { run: npm run lint }]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
   typecheck:
     runs-on: ubuntu-latest
-    steps: [{ uses: actions/checkout@v4 }, { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }, { run: npm ci }, { run: npx tsc --noEmit }]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+
   unit:
     runs-on: ubuntu-latest
     steps:
-      - { uses: actions/checkout@v4 }
-      - { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }
-      - { run: npm ci }
-      - { run: npm run test -- --coverage }
-      - { uses: actions/upload-artifact@v4, with: { name: coverage, path: coverage } }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test -- --coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+
   e2e:
     runs-on: ubuntu-latest
     services:
-      postgres: { image: postgres:15, env: { POSTGRES_USER: stellar, POSTGRES_PASSWORD: stellar, POSTGRES_DB: stellarrail_test }, ports: ["5432:5432"], options: --health-cmd pg_isready --health-interval 10s }
-      redis: { image: redis:7, ports: ["6379:6379"], options: --health-cmd "redis-cli ping" --health-interval 10s }
-    env: { CHAIN_DRY_RUN: "true", DATABASE_URL: postgresql://stellar:stellar@localhost:5432/stellarrail_test, REDIS_URL: redis://localhost:6379, JWT_ACCESS_SECRET: test-access-secret-min-32-chars-long-xxxx, JWT_REFRESH_SECRET: test-refresh-secret-min-32-chars-long-xxx, STELLAR_NETWORK: testnet, HORIZON_URL: https://horizon-testnet.stellar.org, SOROBAN_RPC_URL: https://soroban-testnet.stellar.org, ESCROW_CONTRACT_ID: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM, KMS_PROVIDER: local, ALLOW_LOCAL_SIGNER: "true" }
-    steps: [{ uses: actions/checkout@v4 }, { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }, { run: npm ci }, { run: npm run test:e2e:ci }]
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: stellar
+          POSTGRES_PASSWORD: stellar
+          POSTGRES_DB: stellarrail_test
+        ports:
+          - "5432:5432"
+        options: --health-cmd pg_isready --health-interval 10s
+      redis:
+        image: redis:7
+        ports:
+          - "6379:6379"
+        options: --health-cmd "redis-cli ping" --health-interval 10s
+    env:
+      CHAIN_DRY_RUN: "true"
+      DATABASE_URL: postgresql://stellar:stellar@localhost:5432/stellarrail_test
+      REDIS_URL: redis://localhost:6379
+      JWT_ACCESS_SECRET: test-access-secret-min-32-chars-long-xxxx
+      JWT_REFRESH_SECRET: test-refresh-secret-min-32-chars-long-xxx
+      STELLAR_NETWORK: testnet
+      HORIZON_URL: https://horizon-testnet.stellar.org
+      SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
+      ESCROW_CONTRACT_ID: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM
+      KMS_PROVIDER: local
+      ALLOW_LOCAL_SIGNER: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:e2e:ci
+
   build:
     runs-on: ubuntu-latest
-    steps: [{ uses: actions/checkout@v4 }, { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }, { run: npm ci }, { run: npm run build }, { run: npx prisma validate }]
+    env:
+      DATABASE_URL: postgresql://stellar:stellar@localhost:5432/stellarrail
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx prisma validate
+
   prisma-validate:
     runs-on: ubuntu-latest
-    steps: [{ uses: actions/checkout@v4 }, { uses: actions/setup-node@v4, with: { node-version: 20, cache: npm } }, { run: npm ci }, { run: npx prisma validate }]
+    env:
+      DATABASE_URL: postgresql://stellar:stellar@localhost:5432/stellarrail
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
