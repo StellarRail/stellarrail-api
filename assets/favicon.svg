@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#02050D" />
+    </linearGradient>
+    <linearGradient id="favRail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#favBg)" stroke="#38BDF8" stroke-width="2" />
+  <!-- Upper Track -->
+  <path d="M 14 26 L 26 16 L 38 16 L 50 26" stroke="url(#favRail)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Lower Track -->
+  <path d="M 14 38 L 26 48 L 38 48 L 50 38" stroke="url(#favRail)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Horizontal Corridor -->
+  <line x1="10" y1="32" x2="22" y2="32" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" />
+  <line x1="42" y1="32" x2="54" y2="32" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" />
+  <!-- Star Facets -->
+  <polygon points="32,18 32,32 29,32" fill="#FFFFFF" />
+  <polygon points="32,18 35,32 32,32" fill="#BAE6FD" />
+  <polygon points="32,46 32,32 35,32" fill="#0284C7" />
+  <polygon points="32,46 29,32 32,32" fill="#0369A1" />
+  <polygon points="46,32 32,32 32,29" fill="#38BDF8" />
+  <polygon points="46,32 32,35 32,32" fill="#0284C7" />
+  <polygon points="18,32 32,32 32,35" fill="#38BDF8" />
+  <polygon points="18,32 32,29 32,32" fill="#FFFFFF" />
+  <polygon points="32,29 35,32 32,35 29,32" fill="#FFFFFF" />
+</svg>
