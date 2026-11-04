@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: stellarrail-api
+    runtime: node
+    plan: free
+    region: frankfurt # or oregon, ohio, singapore - match closest to your Supabase region
+    buildCommand: npm install && npm run build
+    startCommand: npx prisma migrate deploy && npm run start:prod
+    healthCheckPath: /api/v1/health/live
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: STELLAR_NETWORK
+        value: testnet
+      - key: HORIZON_URL
+        value: https://horizon-testnet.stellar.org
+      - key: SOROBAN_RPC_URL
+        value: https://soroban-testnet.stellar.org
+      - key: ESCROW_CONTRACT_ID
+        value: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM
+      - key: KMS_PROVIDER
+        value: local
+      - key: ALLOW_LOCAL_SIGNER
+        value: "true"
+      - key: CHAIN_DRY_RUN
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: REDIS_URL
+        value: redis://localhost:6379
+      - key: DATABASE_URL
+        sync: false # Set manually in Render dashboard with Supabase connection string
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
